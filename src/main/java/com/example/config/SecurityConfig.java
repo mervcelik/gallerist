@@ -30,7 +30,7 @@ public class SecurityConfig {
     private JWTAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired
-    AuthEntryPoint authEntryPoint;
+    private AuthEntryPoint authEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

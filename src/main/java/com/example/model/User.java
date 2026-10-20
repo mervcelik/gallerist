@@ -21,18 +21,13 @@ import lombok.Setter;
 @AllArgsConstructor
 public class User extends BaseEntity implements UserDetails {
 	
-	private String userName;
+	private String username;
 	
 	private String password;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of();
-	}
-
-	@Override
-	public String getUsername() {
-		return userName;
 	}
 
 }

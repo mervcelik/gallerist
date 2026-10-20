@@ -2,6 +2,8 @@ package com.example.model;
 
 import java.util.Date;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -11,6 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
+@Getter
+@Setter
 @MappedSuperclass
 public class BaseEntity {
 	@Id
