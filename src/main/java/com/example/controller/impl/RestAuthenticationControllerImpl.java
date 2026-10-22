@@ -6,6 +6,7 @@ import com.example.controller.RootEntity;
 import com.example.dto.AuthRequest;
 import com.example.dto.AuthResponse;
 import com.example.dto.DtoUser;
+import com.example.dto.RefreshTokenRequest;
 import com.example.service.IAuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,11 @@ public class RestAuthenticationControllerImpl extends RestBaseController impleme
     @Override
     public RootEntity<AuthResponse> authenticate(@Valid @RequestBody AuthRequest input) {
         return ok(authenticationService.authenticate(input));
+    }
+
+    @PostMapping("/refreshToken")
+    @Override
+    public RootEntity<AuthResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest input) {
+        return ok(authenticationService.refreshToken(input));
     }
 }

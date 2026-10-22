@@ -26,6 +26,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserDetailsService userDetailService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -38,26 +39,24 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         String token;
         String username;
 
-        token =header.substring(7);
+        token = header.substring(7);
         try {
-            username=jwtService.getUsernameByToken(token);
-            if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
+            username = jwtService.getUsernameByToken(token);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailService.loadUserByUsername(username);
-                if(userDetails!=null && jwtService.isTokenValid(token)){
-                    UsernamePasswordAuthenticationToken authenticationToken= new UsernamePasswordAuthenticationToken(username,null,userDetails.getAuthorities());
+                if (userDetails != null && jwtService.isTokenValid(token)) {
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, userDetails.getAuthorities());
 
 
                     authenticationToken.setDetails(userDetails);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             }
+        } catch (ExpiredJwtException ex) {
+            throw new BaseException(new ErrorMessage(MessageType.TOKEN_IS_EXPIRED, ex.getMessage()));
+        } catch (Exception e) {
+            throw new BaseException(new ErrorMessage(MessageType.GENERAL_EXCEPTION, e.getMessage()));
         }
-        catch (ExpiredJwtException ex){
-            throw  new BaseException(new ErrorMessage(MessageType.TOKEN_IS_EXPIRED,ex.getMessage()));
-        }
-        catch (Exception e) {
-            throw  new BaseException(new ErrorMessage(MessageType.GENERAL_EXCEPTION,e.getMessage()));
-        }
-
+        filterChain.doFilter(request, response);
     }
 }
