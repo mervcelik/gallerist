@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DtoAddressUI  extends  DtoBase{
+public class DtoAddressIU extends  DtoBase{
 
     @NotEmpty
     private String city;
