@@ -12,6 +12,7 @@ public enum MessageType {
     REFRESH_TOKEN_NOT_FOUND("1008","Refresh Token Bulunamadı"),
     REFRESH_TOKEN_IS_EXPIRED("1009","Refresh Token süresi bitmiştir."),
     RECORD_ALREADY_EXIST("1010","kayıt zaten mevcut"),
+    CURRENCY_RATES_NOT_AVAILABLE("1011","döviz kurları alınamadı"),
     GENERAL_EXCEPTION("9999", "genel bir hata oluştu");
 
 

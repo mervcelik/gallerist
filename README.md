@@ -104,6 +104,36 @@ Her kaynak aynı yapıyı kullanır (`{kaynak}` yerine aşağıdaki tablodaki yo
 }
 ```
 
+### Döviz kurları
+
+TCMB'nin günlük kurlarını (`https://www.tcmb.gov.tr/kurlar/today.xml`) her istekte çekip TL karşılığı olarak döner. API anahtarı gerekmez.
+
+| Metot | Yol | İşlem |
+|---|---|---|
+| GET | `/rest/api/currency-rates` | Günün tarihini ve bütün kurları döner |
+| GET | `/rest/api/currency-rates/{kod}` | Tek bir kuru döner (ör. `USD`, `EUR`; büyük/küçük harf fark etmez) |
+
+```json
+// GET /rest/api/currency-rates/USD
+{
+  "status": 200,
+  "payload": {
+    "currencyCode": "USD",
+    "name": "ABD DOLARI",
+    "unit": 1,
+    "forexBuying": 49.9589,
+    "forexSelling": 50.0489,
+    "banknoteBuying": 49.9239,
+    "banknoteSelling": 50.1239
+  },
+  "errorMessage": null
+}
+```
+
+TCMB'nin boş bıraktığı değerler `null` döner (ör. `XDR` için efektif kurlar). Bilinmeyen kodlarda `1004`, TCMB'ye ulaşılamazsa `1011` hatası döner.
+
+### Notlar
+
 Müşteri ve galerici kaydetmeden önce adres (ve müşteri için hesap) oluşturulmalıdır; cevapta bu kayıtlar iç içe döner. Bir adres en fazla bir müşteriye ve en fazla bir galericiye bağlanabilir (`@OneToOne`). Aynı galerici-araç çifti iki kez eklenemez.
 
 ## Cevap formatı
@@ -139,6 +169,7 @@ Doğrulama hatalarında (eksik alan) `message` alan adına göre hata listesi i�
 | 1008 | Refresh Token Bulunamadı |
 | 1009 | Refresh Token süresi bitmiştir. |
 | 1010 | kayıt zaten mevcut |
+| 1011 | döviz kurları alınamadı |
 | 9999 | genel bir hata oluştu |
 
 ## Proje yapısı
