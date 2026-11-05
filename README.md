@@ -104,6 +104,25 @@ Her kaynak aynı yapıyı kullanır (`{kaynak}` yerine aşağıdaki tablodaki yo
 }
 ```
 
+### Araç satışı
+
+Bir müşterinin bir galerideki aracı satın almasını sağlar.
+
+| Metot | Yol | İşlem |
+|---|---|---|
+| POST | `/rest/api/saled-car/save` | Satın alma yapar (`galleristId`, `carId`, `customerId`) |
+| GET | `/rest/api/saled-car/list` | Bütün satışları listeler |
+| GET | `/rest/api/saled-car/list/{id}` | Id ile satış getirir |
+
+Satın alma sırasında:
+
+1. Galerici, araç ve müşteri bulunur; araç o galeride olmalı ve durumu `SALABLE` olmalıdır.
+2. Araç fiyatı müşterinin hesabının para birimine TCMB kurlarıyla çevrilir. Müşterinin alması gereken döviz için **döviz satış**, elindeki dövizle ödediği durumda **döviz alış** kuru kullanılır. Para birimleri aynıysa çevrim yapılmaz.
+3. Bakiye yetmezse satış yapılmaz.
+4. Tutar hesaptan düşülür, aracın durumu `SALED` olur ve satış kaydı (`paidAmount`, `paidCurrencyType`, `exchangeRate`) oluşturulur. Bunların hepsi tek bir transaction içinde yapılır.
+
+Örnek: TL hesaplı bir müşteri 20.000 USD'lik aracı, USD döviz satış kuru 50,0489 iken 1.000.978,00 TL ödeyerek alır.
+
 ### Döviz kurları
 
 TCMB'nin günlük kurlarını (`https://www.tcmb.gov.tr/kurlar/today.xml`) her istekte çekip TL karşılığı olarak döner. API anahtarı gerekmez.
@@ -170,6 +189,10 @@ Doğrulama hatalarında (eksik alan) `message` alan adına göre hata listesi i�
 | 1009 | Refresh Token süresi bitmiştir. |
 | 1010 | kayıt zaten mevcut |
 | 1011 | döviz kurları alınamadı |
+| 1012 | araç zaten satılmış |
+| 1013 | araç bu galeride bulunmuyor |
+| 1014 | müşterinin bakiyesi yetersiz |
+| 1015 | müşterinin hesabı yok |
 | 9999 | genel bir hata oluştu |
 
 ## Proje yapısı
@@ -188,5 +211,3 @@ src/main/java/com/example
 ├── service       Servis arayüzleri ve impl/ altında uygulamaları
 └── starter       GalleristApplication (giriş noktası)
 ```
-
-`SaledCar` (satılan araç) entity'si modelde tanımlı, ancak henüz uç noktası yok.

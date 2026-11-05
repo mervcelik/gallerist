@@ -1,6 +1,12 @@
 package com.example.model;
 
+import java.math.BigDecimal;
+
+import com.example.enums.CurrencyType;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -25,4 +31,13 @@ public class SaledCar extends BaseEntity {
 
 	@ManyToOne
 	private Customer customer;
+
+	/** Amount taken from the customer's account, in the account's currency. */
+	private BigDecimal paidAmount;
+
+	@Enumerated(EnumType.STRING)
+	private CurrencyType paidCurrencyType;
+
+	/** Units of the account currency paid per 1 unit of the car currency; 1 when they are the same. */
+	private BigDecimal exchangeRate;
 }
